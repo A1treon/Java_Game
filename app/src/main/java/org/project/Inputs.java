@@ -30,11 +30,6 @@ public class Inputs extends MouseAdapter implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
-    public boolean isActionActive(String actionName) {
-        int keyCode = settings.getKeyForAction(actionName);
-        return pressedKeys.contains(keyCode);
-    }
-
     // --- Mouse Logic ---
     @Override
     public void mousePressed(MouseEvent e) {
