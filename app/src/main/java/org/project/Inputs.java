@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
 import org.project.settings.Settings;
+import org.project.settings.KeyAction;
 
 public class Inputs extends MouseAdapter implements KeyListener {
 
@@ -30,8 +31,8 @@ public class Inputs extends MouseAdapter implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
-    public boolean isActionActive(String actionName) {
-        int keyCode = settings.getKeyForAction(actionName);
+    public boolean isActionActive(KeyAction action) {
+        int keyCode = settings.getKeyForAction(action);
         return pressedKeys.contains(keyCode);
     }
 
