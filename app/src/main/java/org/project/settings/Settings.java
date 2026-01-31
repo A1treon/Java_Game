@@ -32,7 +32,7 @@ public class Settings {
             case RIGHT: return keyBindings[KeyAction.RIGHT.ordinal()];
             case JUMP: return keyBindings[KeyAction.JUMP.ordinal()];
             case ATTACK: return keyBindings[KeyAction.ATTACK.ordinal()];
-            default: return -1; // Undefined action
+            default: return -1;
         }
     }
 }
