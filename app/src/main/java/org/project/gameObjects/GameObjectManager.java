@@ -117,27 +117,34 @@ public class GameObjectManager {
             ySpeed += EntityConstants.PLAYER_JUMP_VELOCITY;
         }
         
+        player.moveHorizontal(xSpeed);
+        player.moveVertical(ySpeed);
+        
+        boolean isGrounded = false;
         for (Surface surface : surfaces) {
-            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.BOTTOM && player.getPhysics().getYVelocity() < 0) {
-                player.setIsGrounded(true);
-            } else {
-                player.setIsGrounded(false);
-            }
-            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.TOP && ySpeed > 0) {
-                ySpeed = 0;
-            }
-            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.LEFT && xSpeed < 0) {
-                xSpeed = 0;
-            }
-            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.RIGHT && xSpeed > 0) {
-                xSpeed = 0;
+            Collider.CollisionDirection collision = player.checkCollisionWith(surface);
+            if (collision != Collider.CollisionDirection.NONE) {
+                resolveCollision(player, surface, collision);
+                
+                if (collision == Collider.CollisionDirection.BOTTOM && player.getPhysics().getYVelocity() < 0) {
+                    isGrounded = true;
+                }
             }
         }
         
-        player.moveHorizontal(xSpeed);
-        player.moveVertical(ySpeed);
-    }
+        for (Entity entity : entities) {
+            Collider.CollisionDirection collision = player.checkCollisionWith(entity);
+            if (collision != Collider.CollisionDirection.NONE) {
+                resolveEntityCollision(player, entity, collision);
 
+                if (collision == Collider.CollisionDirection.BOTTOM && player.getPhysics().getYVelocity() < 0) {
+                    isGrounded = true;
+                }
+            }
+        }
+        
+        player.setIsGrounded(isGrounded);
+    }
 
     public static void updateEntityMovement(Entity entity) {
         double xSpeed = 0.0;
@@ -154,25 +161,79 @@ public class GameObjectManager {
         if (player.getYPos() < entity.getYPos()) {
             ySpeed -= EntityConstants.ENTITY_Y_VELOCITY;
         }
-        for (Surface surface : surfaces) {
-            if (entity.checkCollisionWith(surface) == Collider.CollisionDirection.BOTTOM && ySpeed < 0) {
-                ySpeed = 0;
-            }
-            if (entity.checkCollisionWith(surface) == Collider.CollisionDirection.TOP && ySpeed > 0) {
-                ySpeed = 0;
-            }
-            if (entity.checkCollisionWith(surface) == Collider.CollisionDirection.LEFT && xSpeed < 0) {
-                xSpeed = 0;
-            }
-            if (entity.checkCollisionWith(surface) == Collider.CollisionDirection.RIGHT && xSpeed > 0) {
-                xSpeed = 0;
-            }
-        }
         
         entity.moveHorizontal(xSpeed);
         entity.moveVertical(ySpeed);
+        
+        for (Surface surface : surfaces) {
+            Collider.CollisionDirection collision = entity.checkCollisionWith(surface);
+            if (collision != Collider.CollisionDirection.NONE) {
+                resolveCollision(entity, surface, collision);
+            }
+        }
+        
+        for (Entity otherEntity : entities) {
+            if (entity != otherEntity) {
+                Collider.CollisionDirection collision = entity.checkCollisionWith(otherEntity);
+                if (collision != Collider.CollisionDirection.NONE) {
+                    resolveEntityCollision(entity, otherEntity, collision);
+                }
+            }
+        }
+        
+        Collider.CollisionDirection playerCollision = entity.checkCollisionWith(player);
+        if (playerCollision != Collider.CollisionDirection.NONE) {
+            resolveEntityCollision(entity, player, playerCollision);
+        }
     }
 
+    private static void resolveCollision(Entity entity, Surface surface, Collider.CollisionDirection direction) {        
+        double surfaceLeft = surface.getXPos();
+        double surfaceRight = surface.getXPos() + surface.getWidth();
+        double surfaceTop = surface.getYPos() + surface.getHeight();
+        double surfaceBottom = surface.getYPos();
+        
+        switch(direction) {
+            case BOTTOM:
+                entity.setYPos(surfaceTop);
+                break;
+            case TOP:
+                entity.setYPos(surfaceBottom - entity.getHeight());
+                break;
+            case LEFT:
+                entity.setXPos(surfaceLeft - entity.getWidth());
+                break;
+            case RIGHT:
+                entity.setXPos(surfaceRight);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void resolveEntityCollision(Entity entity1, Entity entity2, Collider.CollisionDirection direction) {
+        double entity2Left = entity2.getXPos();
+        double entity2Right = entity2.getXPos() + entity2.getWidth();
+        double entity2Top = entity2.getYPos() + entity2.getHeight();
+        double entity2Bottom = entity2.getYPos();
+        
+        switch(direction) {
+            case BOTTOM:
+                entity1.setYPos(entity2Top);
+                break;
+            case TOP:
+                entity1.setYPos(entity2Bottom - entity1.getHeight());
+                break;
+            case LEFT:
+                entity1.setXPos(entity2Left - entity1.getWidth());
+                break;
+            case RIGHT:
+                entity1.setXPos(entity2Right);
+                break;
+            default:
+                break;
+        }
+    }
 
 }
 
