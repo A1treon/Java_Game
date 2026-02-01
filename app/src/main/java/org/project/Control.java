@@ -42,8 +42,7 @@ public class Control implements Runnable {
         Inputs inputHandler = new Inputs(settings);
         GameObjectManager.initialize(inputHandler);
         GameObject.getSettings(settings);
-        GameObjectManager.createPlayer();
-        GameObjectManager.createFloor();
+        GameObjectManager.initializeGameObjects();
 
         try {
             SwingUtilities.invokeAndWait(() -> {
@@ -85,7 +84,7 @@ public class Control implements Runnable {
 
     private void controlUpdate(double delta) {
         Physics.setDeltaTime(delta);
-        GameObjectManager.updatePlayer();
+        GameObjectManager.updateGameObjects();
     }
 
     private void render() {
