@@ -48,10 +48,11 @@ public class Physics {
     }
 
     public double getNewYPosition(double currentY) {
+        double vel = currentY + yVelocity * deltaTime;
         if (gravityOn) {
             yVelocity += gravity * deltaTime; 
         }
-        return currentY + yVelocity * deltaTime;
+        return vel;
     }
     
 }

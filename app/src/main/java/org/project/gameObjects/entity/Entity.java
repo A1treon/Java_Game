@@ -37,9 +37,6 @@ public class Entity extends GameObject {
         syncCollider();
     }
     
-    /**
-     * Sync the collider with the entity's current position and dimensions
-     */
     private void syncCollider() {
         collider.setXPos(this.getXPos());
         collider.setYPos(this.getYPos());
@@ -47,13 +44,13 @@ public class Entity extends GameObject {
         collider.setHeight(this.getHeight());
     }
 
-    public void moveVertical(double speed) {
-        physics.setYVelocity(speed);
+    public void moveVertical(double velocity) {
+        physics.setYVelocity(velocity);
         setYPos(physics.getNewYPosition(super.getYPos()));
     }
     
-    public void moveHorizontal(double speed) {
-        physics.setXVelocity(speed);
+    public void moveHorizontal(double velocity) {
+        physics.setXVelocity(velocity);
         setXPos(physics.getNewXPosition(super.getXPos()));
     }
     
@@ -63,5 +60,9 @@ public class Entity extends GameObject {
     
     public Collider getCollider() {
         return collider;
+    }
+
+    public Physics getPhysics() {
+        return physics;
     }
 }

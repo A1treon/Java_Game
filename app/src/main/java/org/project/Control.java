@@ -70,7 +70,8 @@ public class Control implements Runnable {
             delta += (now - lastTime) / nsPerFrame;
             lastTime = now;
             while (delta >= 1) {
-                controlUpdate(delta); 
+                double deltaTimeSeconds = 1.0 / settings.getFrameRate();
+                controlUpdate(deltaTimeSeconds); 
                 render();        
                 delta--;
             }

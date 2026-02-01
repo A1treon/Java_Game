@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.project.Inputs;
 import org.project.gameObjects.entity.Entity;
+import org.project.gameObjects.entity.GravityEntity;
 import org.project.gameObjects.entity.EntityConstants;
 import org.project.gameObjects.surfaces.Surface;
 import org.project.settings.KeyAction;
@@ -14,7 +15,7 @@ public class GameObjectManager {
     private static List<GameObject> gameObjects;
     private static List<Surface> surfaces;
     private static Inputs inputs;
-    private static Entity player;
+    private static GravityEntity player;
 
     public static void initialize(Inputs inputs) {
         GameObjectManager.inputs = inputs;
@@ -27,7 +28,7 @@ public class GameObjectManager {
     }
 
     public static void createPlayer() {
-        player = new Entity();
+        player = new GravityEntity();
         player.setXPos(0.00);
         player.setYPos(0.50);
         player.setWidth(0.02 / (16.0 / 9.0));
@@ -60,25 +61,24 @@ public class GameObjectManager {
         if (inputs.isActionActive(KeyAction.RIGHT)) {
             xSpeed += EntityConstants.PLAYER_X_VELOCITY;
         }
-        if (inputs.isActionActive(KeyAction.UP)) {
-            ySpeed += EntityConstants.PLAYER_Y_VELOCITY;
-        }
-        if (inputs.isActionActive(KeyAction.DOWN)) {
-            ySpeed -= EntityConstants.PLAYER_Y_VELOCITY;
+        if (inputs.isActionActive(KeyAction.JUMP)) {
+            ySpeed += EntityConstants.PLAYER_JUMP_VELOCITY;
         }
         
         for (Surface surface : surfaces) {
             player.checkCollisionWith(surface);
-            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.BOTTOM && ySpeed < 0) {
+            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.BOTTOM && player.getPhysics().getYVelocity() < 0) {
+                player.setIsGrounded(true);
+            } else {
+                player.setIsGrounded(false);
+            }
+            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.TOP && ySpeed > 0) {
                 ySpeed = 0;
             }
-            else if (player.checkCollisionWith(surface) == Collider.CollisionDirection.TOP && ySpeed > 0) {
-                ySpeed = 0;
-            }
-            else if (player.checkCollisionWith(surface) == Collider.CollisionDirection.LEFT && xSpeed < 0) {
+            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.LEFT && xSpeed < 0) {
                 xSpeed = 0;
             }
-            else if (player.checkCollisionWith(surface) == Collider.CollisionDirection.RIGHT && xSpeed > 0) {
+            if (player.checkCollisionWith(surface) == Collider.CollisionDirection.RIGHT && xSpeed > 0) {
                 xSpeed = 0;
             }
         }
