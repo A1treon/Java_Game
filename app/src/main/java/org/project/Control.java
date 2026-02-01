@@ -6,10 +6,12 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.SwingUtilities;
 
+import org.project.gameObjects.GameObject;
+import org.project.gameObjects.GameObjectManager;
+import org.project.gameObjects.Physics;
 import org.project.graphics.GameFrame;
 import org.project.settings.Settings;
 import org.project.settings.SettingsManager;
-
 
 public class Control implements Runnable {
 
@@ -23,6 +25,9 @@ public class Control implements Runnable {
     }
 
     private void initialize() {
+
+        GameObjectManager.initialize();
+
         if (settings.isFirstRun()) {
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             int refreshRate = gd.getDisplayMode().getRefreshRate();
@@ -36,9 +41,17 @@ public class Control implements Runnable {
             SettingsManager.save(settings);
         }
 
-        SwingUtilities.invokeLater(() -> {
-            gameFrame = new GameFrame(settings);
-        });
+        GameObject.getSettings(settings);
+        GameObjectManager.createPlayer();
+
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                gameFrame = new GameFrame(settings, GameObjectManager.getGameObjects());
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         Inputs inputHandler = new Inputs(settings);
         gameFrame.getGamePanel().addKeyListener(inputHandler);
         gameFrame.getGamePanel().addMouseListener(inputHandler);
@@ -57,7 +70,7 @@ public class Control implements Runnable {
             delta += (now - lastTime) / nsPerFrame;
             lastTime = now;
             while (delta >= 1) {
-                controlUpdate(); 
+                controlUpdate(delta); 
                 render();        
                 delta--;
             }
@@ -69,8 +82,9 @@ public class Control implements Runnable {
         }
     }
 
-    private void controlUpdate() {
-        // Handle your game logic here (math, collision, etc.)
+    private void controlUpdate(double delta) {
+        Physics.setDeltaTime(delta);
+        
     }
 
     private void render() {
