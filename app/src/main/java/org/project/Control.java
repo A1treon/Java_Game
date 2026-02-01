@@ -43,6 +43,7 @@ public class Control implements Runnable {
         GameObjectManager.initialize(inputHandler);
         GameObject.getSettings(settings);
         GameObjectManager.createPlayer();
+        GameObjectManager.createFloor();
 
         try {
             SwingUtilities.invokeAndWait(() -> {

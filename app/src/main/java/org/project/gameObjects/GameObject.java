@@ -45,6 +45,10 @@ public class GameObject {
     public void setColor(Color color) {
         this.color = color;
     }
+    
+    public Collider getCollider() {
+        return new Collider(xPos, yPos, width, height);
+    }
 
     public void draw(Graphics2D g2d) {
         int xResolution = settings.getXResolution();
@@ -57,3 +61,4 @@ public class GameObject {
         g2d.fillRect(renderX, renderY, renderWidth, renderHeight);
     }
 }
+

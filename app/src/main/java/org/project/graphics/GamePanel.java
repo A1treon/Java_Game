@@ -20,10 +20,9 @@ public class GamePanel extends JPanel {
     public GamePanel(Settings settings, List<GameObject> gameObjects) {
         this.settings = settings;
         this.gameObjects = gameObjects;
-        this.setBackground(Color.BLACK); // Set a default background
-        this.setDoubleBuffered(true);    // Ensures smooth rendering
-        this.setFocusable(true);         // Allows the panel to receive key inputs
-
+        this.setBackground(Color.BLACK); 
+        this.setDoubleBuffered(true);    
+        this.setFocusable(true);         
     }
 
     @Override
