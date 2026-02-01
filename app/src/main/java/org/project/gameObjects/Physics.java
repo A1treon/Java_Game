@@ -18,6 +18,10 @@ public class Physics {
     public static void setDeltaTime(double deltaTime) {
         Physics.deltaTime = deltaTime;
     }
+    
+    public static double getDeltaTime() {
+        return deltaTime;
+    }
 
     public void setGravityOn(boolean gravityOn) {
         this.gravityOn = gravityOn;
