@@ -1,8 +1,13 @@
 package org.project;
 
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.project.settings.KeyAction;
 import org.project.settings.Settings;
 
 public class Inputs extends MouseAdapter implements KeyListener {
@@ -29,6 +34,11 @@ public class Inputs extends MouseAdapter implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public boolean isActionActive(KeyAction action) {
+        int keyCode = settings.getKeyForAction(action);
+        return pressedKeys.contains(keyCode);
+    }
 
     // --- Mouse Logic ---
     @Override

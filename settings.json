@@ -1,7 +1,6 @@
 {
   "firstRun" : false,
   "frameRate" : 240,
-  "keyBindings" : [87, 83, 65, 68, 32, 17],
   "yresolution" : 1440,
   "xresolution" : 2560
 }

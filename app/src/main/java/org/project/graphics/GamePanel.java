@@ -4,20 +4,25 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.project.gameObjects.GameObject;
 import org.project.settings.Settings;
 
 public class GamePanel extends JPanel {
 
     Settings settings;
 
-    public GamePanel(Settings settings) {
+    List<GameObject> gameObjects;
+
+    public GamePanel(Settings settings, List<GameObject> gameObjects) {
         this.settings = settings;
-        this.setBackground(Color.BLACK); // Set a default background
-        this.setDoubleBuffered(true);    // Ensures smooth rendering
-        this.setFocusable(true);         // Allows the panel to receive key inputs
+        this.gameObjects = gameObjects;
+        this.setBackground(Color.BLACK); 
+        this.setDoubleBuffered(true);    
+        this.setFocusable(true);         
     }
 
     @Override
@@ -25,19 +30,6 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        double scaleX = (double) getWidth() / settings.getXResolution();
-        double scaleY = (double) getHeight() / settings.getYResolution();
-        double scale = Math.min(scaleX, scaleY);
-
-        // 2. Center the game "canvas"
-        int xOffset = (int) ((getWidth() - (settings.getXResolution() * scale)) / 2);
-        int yOffset = (int) ((getHeight() - (settings.getYResolution() * scale)) / 2);
-
-        // 3. Apply transformations
-        g2d.translate(xOffset, yOffset);
-        g2d.scale(scale, scale);
-
-        // 4. Draw your game logic using TARGET coordinates
         renderGame(g2d);
 
         Toolkit.getDefaultToolkit().sync();
@@ -45,7 +37,9 @@ public class GamePanel extends JPanel {
 
     private void renderGame(Graphics2D g2d) {
         g2d.setColor(Color.BLUE);
-        // This will always be a square in the center, regardless of window size
         g2d.fillRect(0, 0, settings.getXResolution(), settings.getYResolution()); 
+        for (GameObject obj : gameObjects) {
+            obj.draw(g2d);
+        }
     }
 }

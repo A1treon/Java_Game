@@ -6,10 +6,12 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.SwingUtilities;
 
+import org.project.gameObjects.GameObject;
+import org.project.gameObjects.GameObjectManager;
+import org.project.gameObjects.Physics;
 import org.project.graphics.GameFrame;
 import org.project.settings.Settings;
 import org.project.settings.SettingsManager;
-
 
 public class Control implements Runnable {
 
@@ -23,7 +25,8 @@ public class Control implements Runnable {
     }
 
     private void initialize() {
-        if (settings.isFirstRun()) {
+
+        if (settings.getFirstRun()) {
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             int refreshRate = gd.getDisplayMode().getRefreshRate();
             if (refreshRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
@@ -36,10 +39,20 @@ public class Control implements Runnable {
             SettingsManager.save(settings);
         }
 
-        SwingUtilities.invokeLater(() -> {
-            gameFrame = new GameFrame(settings);
-        });
         Inputs inputHandler = new Inputs(settings);
+        GameObjectManager.initialize(inputHandler);
+        GameObject.getSettings(settings);
+        GameObjectManager.createPlayer();
+        GameObjectManager.createFloor();
+
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                gameFrame = new GameFrame(settings, GameObjectManager.getGameObjects());
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         gameFrame.getGamePanel().addKeyListener(inputHandler);
         gameFrame.getGamePanel().addMouseListener(inputHandler);
         gameFrame.getGamePanel().addMouseMotionListener(inputHandler);
@@ -57,7 +70,7 @@ public class Control implements Runnable {
             delta += (now - lastTime) / nsPerFrame;
             lastTime = now;
             while (delta >= 1) {
-                controlUpdate(); 
+                controlUpdate(delta); 
                 render();        
                 delta--;
             }
@@ -69,8 +82,9 @@ public class Control implements Runnable {
         }
     }
 
-    private void controlUpdate() {
-        // Handle your game logic here (math, collision, etc.)
+    private void controlUpdate(double delta) {
+        Physics.setDeltaTime(delta);
+        GameObjectManager.updatePlayer();
     }
 
     private void render() {
