@@ -47,10 +47,12 @@ public class GameObject {
     }
 
     public void draw(Graphics2D g2d) {
-        int renderX = (int)(xPos * settings.getXResolution());
-        int renderY = (int)(yPos * settings.getYResolution());
-        int renderWidth = (int)(width * settings.getXResolution());
-        int renderHeight = (int)(height * settings.getYResolution());
+        int xResolution = settings.getXResolution();
+        int yResolution = settings.getYResolution();
+        int renderWidth = (int)(width * xResolution);
+        int renderHeight = (int)(height * yResolution);
+        int renderX = (int)(xPos * xResolution);
+        int renderY = (int)(yResolution - (yPos * yResolution) - renderHeight);
         g2d.setColor(color);
         g2d.fillRect(renderX, renderY, renderWidth, renderHeight);
     }

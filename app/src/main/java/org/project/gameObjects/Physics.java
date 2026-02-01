@@ -7,6 +7,13 @@ public class Physics {
     private double yVelocity; // %screen per second
     private boolean gravityOn;
     private static double deltaTime;
+
+    public Physics(double gravity) {
+        this.gravity = gravity;
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+        this.gravityOn = false;
+    }
     
     public static void setDeltaTime(double deltaTime) {
         Physics.deltaTime = deltaTime;
@@ -36,11 +43,11 @@ public class Physics {
         return yVelocity;
     }
 
-    public double getNewXPosition(int currentX) {
+    public double getNewXPosition(double currentX) {
         return currentX + xVelocity * deltaTime;
     }
 
-    public double getNewYPosition(int currentY) {
+    public double getNewYPosition(double currentY) {
         if (gravityOn) {
             yVelocity += gravity * deltaTime; 
         }

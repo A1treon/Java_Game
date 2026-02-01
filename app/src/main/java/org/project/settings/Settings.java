@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Settings {
     
     private boolean firstRun = true;
-    private int frameRate = 60;
+    private int frameRate = 240;
     private int xResolution = 1920;
     private int yResolution = 1080; 
-    private int[] keyBindings = new int[KeyAction.values().length];
+    private int[] keyBindings = {87, 83, 65, 68, 32, 17};
 
 
-    public boolean isFirstRun() { return firstRun; }
+    public boolean getFirstRun() { return firstRun; }
     public void setFirstRun(boolean firstRun) { this.firstRun = firstRun; }
 
     public int getFrameRate() { return frameRate; }
@@ -24,15 +24,19 @@ public class Settings {
     public int getYResolution() { return yResolution; }
     public void setYResolution(int yResolution) { this.yResolution = yResolution; }
 
+    public int[] getKeyBindings() { return keyBindings; }
+    public void setKeyBindings(int[] keyBindings) { this.keyBindings = keyBindings; }
+
+
     public int getKeyForAction(KeyAction action) {
-        switch (action) {
-            case UP: return keyBindings[KeyAction.UP.ordinal()];
-            case DOWN: return keyBindings[KeyAction.DOWN.ordinal()];
-            case LEFT: return keyBindings[KeyAction.LEFT.ordinal()];
-            case RIGHT: return keyBindings[KeyAction.RIGHT.ordinal()];
-            case JUMP: return keyBindings[KeyAction.JUMP.ordinal()];
-            case ATTACK: return keyBindings[KeyAction.ATTACK.ordinal()];
-            default: return -1;
-        }
+        return switch (action) {
+            case UP -> keyBindings[KeyAction.UP.ordinal()];
+            case DOWN -> keyBindings[KeyAction.DOWN.ordinal()];
+            case LEFT -> keyBindings[KeyAction.LEFT.ordinal()];
+            case RIGHT -> keyBindings[KeyAction.RIGHT.ordinal()];
+            case JUMP -> keyBindings[KeyAction.JUMP.ordinal()];
+            case ATTACK -> keyBindings[KeyAction.ATTACK.ordinal()];
+            default -> -1;
+        };
     }
 }

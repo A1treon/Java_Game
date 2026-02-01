@@ -26,9 +26,7 @@ public class Control implements Runnable {
 
     private void initialize() {
 
-        GameObjectManager.initialize();
-
-        if (settings.isFirstRun()) {
+        if (settings.getFirstRun()) {
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             int refreshRate = gd.getDisplayMode().getRefreshRate();
             if (refreshRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
@@ -41,6 +39,8 @@ public class Control implements Runnable {
             SettingsManager.save(settings);
         }
 
+        Inputs inputHandler = new Inputs(settings);
+        GameObjectManager.initialize(inputHandler);
         GameObject.getSettings(settings);
         GameObjectManager.createPlayer();
 
@@ -52,7 +52,6 @@ public class Control implements Runnable {
             e.printStackTrace();
         }
         
-        Inputs inputHandler = new Inputs(settings);
         gameFrame.getGamePanel().addKeyListener(inputHandler);
         gameFrame.getGamePanel().addMouseListener(inputHandler);
         gameFrame.getGamePanel().addMouseMotionListener(inputHandler);
@@ -84,7 +83,7 @@ public class Control implements Runnable {
 
     private void controlUpdate(double delta) {
         Physics.setDeltaTime(delta);
-        
+        GameObjectManager.updatePlayer();
     }
 
     private void render() {

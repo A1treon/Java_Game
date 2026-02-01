@@ -8,7 +8,17 @@ public class Entity extends GameObject {
     private Collider collider;
 
     public Entity() {
-        this.physics = new Physics();
+        this.physics = new Physics(EntityConstants.ENTITY_GRAVITY);
         this.collider = new Collider();
     }
+
+    public void moveVertical(double speed) {
+        physics.setYVelocity(speed);
+        super.setYPos(physics.getNewYPosition(super.getYPos()));
+    }
+    public void moveHorizontal(double speed) {
+        physics.setXVelocity(speed);
+        super.setXPos(physics.getNewXPosition(super.getXPos()));
+    }
+
 }

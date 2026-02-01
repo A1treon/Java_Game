@@ -1,14 +1,7 @@
 {
   "firstRun" : false,
   "frameRate" : 240,
-  "xresolution" : 2560,
+  "keyBindings" : [87, 83, 65, 68, 32, 17],
   "yresolution" : 1440,
-  "keyBindings" : {
-    "UP" : 87,
-    "DOWN" : 83,
-    "LEFT" : 65,
-    "RIGHT" : 68,
-    "JUMP" : 32,
-    "SHOOT" : 17
-  }
+  "xresolution" : 2560
 }
