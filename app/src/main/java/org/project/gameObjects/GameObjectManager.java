@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.project.Inputs;
 import org.project.gameObjects.entity.Entity;
-import org.project.gameObjects.entity.GravityEntity;
 import org.project.gameObjects.entity.EntityConstants;
+import org.project.gameObjects.entity.GravityEntity;
 import org.project.gameObjects.surfaces.Surface;
 import org.project.settings.KeyAction;
 
@@ -102,6 +102,7 @@ public class GameObjectManager {
 
     public static void updatePlayer() {
         updatePlayerMovementGravity();
+        updatePlayerAttack();
     }
 
     public static void updatePlayerMovementGravity() {
@@ -145,6 +146,15 @@ public class GameObjectManager {
         
         player.setIsGrounded(isGrounded);
     }
+
+
+    public static void updatePlayerAttack() {
+        if (inputs.isMouseDown()) { 
+            
+        }
+    }
+
+
 
     public static void updateEntityMovement(Entity entity) {
         double xSpeed = 0.0;
@@ -194,20 +204,12 @@ public class GameObjectManager {
         double surfaceBottom = surface.getYPos();
         
         switch(direction) {
-            case BOTTOM:
-                entity.setYPos(surfaceTop);
-                break;
-            case TOP:
-                entity.setYPos(surfaceBottom - entity.getHeight());
-                break;
-            case LEFT:
-                entity.setXPos(surfaceLeft - entity.getWidth());
-                break;
-            case RIGHT:
-                entity.setXPos(surfaceRight);
-                break;
-            default:
-                break;
+            case BOTTOM -> entity.setYPos(surfaceTop);
+            case TOP -> entity.setYPos(surfaceBottom - entity.getHeight());
+            case LEFT -> entity.setXPos(surfaceLeft - entity.getWidth());
+            case RIGHT -> entity.setXPos(surfaceRight);
+            default -> {
+            }
         }
     }
 
@@ -218,20 +220,12 @@ public class GameObjectManager {
         double entity2Bottom = entity2.getYPos();
         
         switch(direction) {
-            case BOTTOM:
-                entity1.setYPos(entity2Top);
-                break;
-            case TOP:
-                entity1.setYPos(entity2Bottom - entity1.getHeight());
-                break;
-            case LEFT:
-                entity1.setXPos(entity2Left - entity1.getWidth());
-                break;
-            case RIGHT:
-                entity1.setXPos(entity2Right);
-                break;
-            default:
-                break;
+            case BOTTOM -> entity1.setYPos(entity2Top);
+            case TOP -> entity1.setYPos(entity2Bottom - entity1.getHeight());
+            case LEFT -> entity1.setXPos(entity2Left - entity1.getWidth());
+            case RIGHT -> entity1.setXPos(entity2Right);
+            default -> {
+            }
         }
     }
 

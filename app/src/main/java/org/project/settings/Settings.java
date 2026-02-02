@@ -1,16 +1,17 @@
 package org.project.settings;
 
+import java.awt.event.KeyEvent;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Settings {
     
     private boolean firstRun = true;
-    private int frameRate = 240;
+    private int frameRate = 60;
     private int xResolution = 1920;
     private int yResolution = 1080; 
-    private int[] keyBindings = {87, 83, 65, 68, 32, 17};
-
+    private int[] keyBindings = {KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE};
 
     public boolean getFirstRun() { return firstRun; }
     public void setFirstRun(boolean firstRun) { this.firstRun = firstRun; }
@@ -35,7 +36,6 @@ public class Settings {
             case LEFT -> keyBindings[KeyAction.LEFT.ordinal()];
             case RIGHT -> keyBindings[KeyAction.RIGHT.ordinal()];
             case JUMP -> keyBindings[KeyAction.JUMP.ordinal()];
-            case ATTACK -> keyBindings[KeyAction.ATTACK.ordinal()];
             default -> -1;
         };
     }
